@@ -1,10 +1,9 @@
 import { Form, Input, FormBtn } from "./SearchBar.styled";
 
-const SearchBar = ({ onChange, onSubmit }) => {
+const SearchBar = ({ onSubmit }) => {
   return (
     <Form onSubmit={onSubmit}>
       <Input 
-        onChange={onChange}
         type="text"
         name="search"
         placeholder="Enter the name of the movie"

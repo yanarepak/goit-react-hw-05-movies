@@ -9,15 +9,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
-  const [query, setQuery] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('query') ?? '';
 
   useEffect(() => {
-    const query = searchParams.get('query') ?? '';
-    if (!query) return;
+    if (!query.trim()) return;
     try {
       getSearchMovie(query).then(response => {
-        console.log(response);
         if (response.data.results.length === 0) {
           return toast.error(`No results for ${query}`, { theme: 'colored' });
         }
@@ -26,18 +24,17 @@ const Movies = () => {
     } catch (error) {
       console.log(error);
     } 
-  }, [query, searchParams]);
-
-  const onHandleChange = event => setQuery(event.target.value);
+  }, [query]);
 
   const onHandleSubmit = event => {
     event.preventDefault();
-    setSearchParams(query !== '' ? { query } : {});
+    const {value} = event.currentTarget.search
+    setSearchParams(value !== '' ? { query: value } : {});
   };
 
   return (
     <div style={{ marginLeft: '30px' }}>
-      <SearchBar onSubmit={onHandleSubmit} onChange={onHandleChange} />
+      <SearchBar onSubmit={onHandleSubmit}  />
       <ToastContainer icon={false} />
       <MovieList movies={movies} />
     </div>
